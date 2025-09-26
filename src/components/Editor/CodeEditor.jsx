@@ -40,6 +40,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question }) => {
 
   
 const handleSubmitClick = () => {
+ if (isSubmitting) return; 
   setIsSubmitting(true);
     const payload = {
       question_text: question?.stem_md,
@@ -136,7 +137,11 @@ const handleSubmitClick = () => {
         <SaButton  onClick={handleSaveClick}>
           Save
         </SaButton>
-        <SaButton  disabled={isSubmitting} variant="contained" size="small" onClick={handleSubmitClick}>
+        <SaButton  disabled={isSubmitting} variant="contained" size="small" onClick={handleSubmitClick}  sx={{
+    '&.Mui-disabled': {
+      cursor: 'default', // override default not-allowed cursor
+    }
+  }}>
           Submit
         </SaButton>
       </Stack>

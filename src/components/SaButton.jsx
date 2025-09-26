@@ -6,7 +6,8 @@ const SaButton = ({
   fontSize = "18px",
   onClick,
   children,
-  style = {}
+  style = {},
+   disabled = false,
 }) => {
   return (
     <button
@@ -19,8 +20,10 @@ const SaButton = ({
         color: "#fff",              
         border: "none",
         borderRadius: "6px",
-        cursor: "pointer",
+        cursor: disabled ? "default" : "pointer", 
+        // cursor: "pointer",
         fontSize,
+         opacity: disabled ? 0.6 : 1, 
         // fontWeight: "bold",
         
         ...style 
