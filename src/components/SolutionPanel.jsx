@@ -38,9 +38,9 @@ function SolutionPanel({output, review}) {
           }}
         >
           <Typography variant="subtitle2">Test Cases</Typography>
-          <Button variant="contained" size="small" color="error">
+          {/* <Button variant="contained" size="small" color="error">
             Failed
-          </Button>
+          </Button> */}
         </Box>
 
         <Typography variant="body2">Test Cases Faised</Typography>
