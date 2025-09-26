@@ -21,7 +21,7 @@ function PracticePage() {
     setProgramOutput("Running...\n\n" + code);
   };
 
-  // Called when submitAnswer returns review_generated in editor
+
   const handleReviewGenerated = (review) => {
     setReviewData(review);
   };
@@ -37,7 +37,7 @@ function PracticePage() {
         .catch((err) => setError(err.message || 'Error fetching question'))
         .finally(() => setLoading(false));
     }, []);
-    console.log(question);
+    // console.log(question);
 
   return (
     <Box sx={{width:'100vw',height:'100vh',display:'flex',
@@ -46,7 +46,7 @@ function PracticePage() {
       <Box sx={{ marginTop: '16px', width:'50%',height:"87%" }}>
       <CodeEditor
           onRun={handleRunCode}
-          onReviewGenerated={handleReviewGenerated} // pass callback down
+          onReviewGenerated={handleReviewGenerated} 
           question={question}
         />
       </Box>

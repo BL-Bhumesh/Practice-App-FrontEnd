@@ -32,10 +32,6 @@ const CodeEditor = ({ onRun, onReviewGenerated, question }) => {
     alert("Saved code:\n" + code);
   };
 
-  // const handleSubmitClick = () => {
-    
-  //   alert("Submitted code:\n" + code);
-  // };
 
   const escapeCodeForJSON = (str) => {
     return JSON.stringify(str).slice(1, -1); 
@@ -59,15 +55,14 @@ const handleSubmitClick = () => {
 
     submitAnswer(payload)
       .then((res) => {
-        console.log('Response:', res.data);
+        // console.log('Response:', res.data);
         // call back up to parent
         if (onReviewGenerated) {
           onReviewGenerated(res.data.payload.review_generated);
         }
       })
       .catch((err) => {
-      console.error('Error submitting answer:', err);
-      // if you want to re-enable on error:
+      // console.error('Error submitting answer:', err);
       setIsSubmitting(false);
     });
   };
