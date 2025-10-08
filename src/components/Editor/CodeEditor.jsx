@@ -10,7 +10,7 @@ const generateRandomUserId = () => {
   return 'Rj' + Math.floor(10000000 + Math.random() * 90000000);
 };
 
-const CodeEditor = ({ onRun, onReviewGenerated, question }) => {
+const CodeEditor = ({ onRun, onReviewGenerated, question,prompt }) => {
   const [code, setCode] = useState('public class MyClass {\n    public static void main(String[] args) {\n           }\n}');
    const [editorTheme, setEditorTheme] = useState('vs-dark');
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +43,7 @@ const handleSubmitClick = () => {
  if (isSubmitting) return; 
   setIsSubmitting(true);
     const payload = {
+      prompt:prompt,
       question_text: question?.stem_md,
       answer_text: escapeCodeForJSON(code),
       question_id: question?.id,
