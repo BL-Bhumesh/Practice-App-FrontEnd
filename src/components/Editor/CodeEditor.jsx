@@ -10,7 +10,7 @@ const generateRandomUserId = () => {
   return 'Rj' + Math.floor(10000000 + Math.random() * 90000000);
 };
 
-const CodeEditor = ({ onRun, onReviewGenerated, question, prompt }) => {
+const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType }) => {
   const [code, setCode] = useState(
     'public class Main {\n    public static void main(String[] args) {\n           }\n}'
   );
@@ -127,6 +127,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt }) => {
       prompt: prompt,
       question_text: question?.stem_md,
       answer_text: escapeCodeForJSON(code),
+      answerType:answerType,
       question_id: question?.id,
       coe_name: 'SRM',
       program_name: 'STEP',
