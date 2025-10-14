@@ -24,30 +24,24 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function PromptDialog({ open, onClose, prompt,updatePrompt }) {
+export default function PromptDialog({ open, onClose, prompt, updatePrompt }) {
   const [mode, setMode] = React.useState("default");
   const [textValue, setTextValue] = React.useState(prompt || "");
-  console.log("Initial Prompt",prompt)
-  console.log("Initial textValue",textValue)
 
-
-  // Update text when prompt prop changes
+  // Sync when prompt prop changes
   React.useEffect(() => {
     setTextValue(prompt || "");
-  }, []);
+  }, [prompt]);
 
   const handleSave = () => {
-    console.log("Saved prompt:", textValue);
-    updatePrompt(textValue)
+    updatePrompt(textValue);
     onClose();
   };
 
-   const handleClose = () => {
-    // console.log("Saved prompt:", textValue);
-    setTextValue(prompt)
+  const handleClose = () => {
+    setTextValue(prompt || "");
     onClose();
   };
-
 
   return (
     <BootstrapDialog
@@ -63,7 +57,7 @@ export default function PromptDialog({ open, onClose, prompt,updatePrompt }) {
 
       <IconButton
         aria-label="close"
-        onClick={onClose}
+        onClick={handleClose}
         sx={(theme) => ({
           position: "absolute",
           right: 8,
@@ -75,15 +69,8 @@ export default function PromptDialog({ open, onClose, prompt,updatePrompt }) {
       </IconButton>
 
       <DialogContent dividers>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 2,
-            minHeight: "400px",
-          }}
-        >
-          {/* Left side: select */}
+        <Box sx={{ display: "flex", gap: 2, minHeight: "400px" }}>
+          {/* Left panel */}
           <Box sx={{ width: "25%", display: "flex", flexDirection: "column" }}>
             <Typography variant="subtitle1" fontWeight="bold" mb={1}>
               Select Prompt Type
@@ -98,7 +85,7 @@ export default function PromptDialog({ open, onClose, prompt,updatePrompt }) {
             </Select>
           </Box>
 
-          {/* Right side: text area */}
+          {/* Right text area */}
           <Box sx={{ flex: 1 }}>
             <Typography variant="subtitle1" fontWeight="bold" mb={1}>
               Prompt Content
@@ -123,7 +110,12 @@ export default function PromptDialog({ open, onClose, prompt,updatePrompt }) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleSave} variant="contained" color="success">
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          color="success"
+          disabled={mode === "default"}
+        >
           Save
         </Button>
         <Button onClick={handleClose} variant="contained" color="primary">
