@@ -9,63 +9,50 @@ import { getPrompt } from "../services/promptServices";
 import PromptDialog from "../components/PromptDialog";
 
 function PracticePage() {
+  const [answerType, setAnswerType] = useState("");
   const [programOutput, setProgramOutput] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [question, setQuestion] = useState(null);
-  const [prompt, setPrompt] = useState("\nYou are a code quality reviewer. Analyze the following {language} code in the context of the given question and return ONLY valid JSON in the format below:\n\n{{\n    \"Question\": \"{question}\",\n    \"Code_Analysis\": {{\n        \"What_worked_well\": \"<text>\",\n        \"What_can_be_improved\": \"<text>\"\n    }},\n    \"Code_Quality_Qualitative\": {{\n        \"Correctness\": \"<text>\",\n        \"Readability\": \"<text>\",\n        \"Maintainability\": \"<text>\",\n        \"Design\": \"<text>\",\n        \"Scalability\": \"<text>\"\n    }},\n    \"Code_Quality_Quantitative\": {{\n        \"Correctness\": <1-10>,\n        \"Readability\": <1-10>,\n        \"Maintainability\": <1-10>,\n        \"Design\": <1-10>,\n        \"Scalability\": <1-10>,\n        \"Overall\": <1-10>\n    }}\n}}\n\nQuestion:\n{question}\n\nCode:\n{code}\nx`");
+  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [data, setData] = useState("");
   const [showPromptDialog, setShowPromptDialog] = useState(false);
 
-  const handleRunCode = (code) => {
-    setProgramOutput("Running...\n\n" + code);
-  };
+  const handleRunCode = (code) => setProgramOutput("Running...\n\n" + code);
+  const handleReviewGenerated = (review) => setReviewData(review);
 
-  const openPromptDialog = () => {
-  setShowPromptDialog(true);
-};
+  const openPromptDialog = () => setShowPromptDialog(true);
+  const closePromptDialog = () => setShowPromptDialog(false);
+  const updatePrompt = (val) => setPrompt(val);
 
-const closePromptDialog = () => {
-  setShowPromptDialog(false);
-};
-
-const updatePrompt=(prompt)=>{
-setPrompt(prompt)
-console.log("Updated Prompt ",prompt);
-}
-
-  const handleReviewGenerated = (review) => {
-    setReviewData(review);
-  };
   useEffect(() => {
-    getQuestions("ASSIGNMENT", 0, 1)
-      .then((res) => {
-        if (res.data?.payload?.length) {
-          setQuestion(res.data.payload[0]);
-        } else {
-          setError("No question found.");
-        }
-      })
-      .catch((err) => setError(err.message || "Error fetching question"))
-      .finally(() => setLoading(false));
+    setLoading(true);
+    setError(null);
 
-    getPrompt()
-      .then((res) => {
-        const prompt =
-          res.data?.default_prompt ||
-          res.data?.payload?.[0]?.default_prompt || null;
-     
-        if (prompt) {
-          setPrompt(prompt);
+    const answer = Math.random() < 0.5 ? "CODE" : "TEXT";
+    setAnswerType(answer);
+    // console.log("Selected answer type:", answer);
+
+    Promise.all([getQuestions(answer, 0, 1), getPrompt(answer)])
+      .then(([qRes, pRes]) => {
+        const questionData = qRes.data?.payload?.[0];
+        let promptData = "";
+
+        if (answer === "CODE") {
+          promptData = pRes.data?.payload?.default_code_check_prompt || "";
         } else {
-          setError("No Prompt found.");
+          promptData = pRes.data?.payload?.default_theory_check_prompt || "";
         }
+
+        if (!questionData) setError("No question found.");
+        if (!promptData) setError("No prompt found.");
+
+        setQuestion(questionData || null);
+        setPrompt(promptData || "");
       })
-      .catch((err) => setError(err.message || "Error fetching Prompt"))
+      .catch((e) => setError(e.message || "Error fetching data"))
       .finally(() => setLoading(false));
-  }, []);
-  // console.log(question);
+  }, []); // run only on refresh
 
   return (
     <Box
@@ -76,17 +63,29 @@ console.log("Updated Prompt ",prompt);
         alignItems: "flex-start",
       }}
     >
-      <ProblemPanel question={question}  openPromptDialog={openPromptDialog}/>
+      <ProblemPanel
+        question={question}
+        loading={loading}
+        error={error}
+        openPromptDialog={openPromptDialog}
+      />
+
       <Box sx={{ marginTop: "16px", width: "50%", height: "87%" }}>
         <CodeEditor
           onRun={handleRunCode}
           onReviewGenerated={handleReviewGenerated}
           question={question}
-          prompt={prompt}  
+          prompt={prompt}
         />
       </Box>
       <SolutionPanel output={programOutput} review={reviewData} />
-      <PromptDialog open={showPromptDialog} onClose={closePromptDialog} prompt={prompt} updatePrompt={updatePrompt}/>
+
+      <PromptDialog
+        open={showPromptDialog}
+        onClose={closePromptDialog}
+        prompt={prompt}
+        updatePrompt={updatePrompt}
+      />
     </Box>
   );
 }
