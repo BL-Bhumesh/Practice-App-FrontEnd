@@ -27,7 +27,8 @@ function ProblemPanel({ question, loading, error, openPromptDialog }) {
       }}
     >
       <Box>
-        <Typography variant="h6" fontWeight="bold">
+        <Typography
+         variant="h6" fontWeight="bold">
           Problem Statement
         </Typography>
         <Divider />
