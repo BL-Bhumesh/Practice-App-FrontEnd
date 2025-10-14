@@ -29,12 +29,25 @@ export default function PromptDialog({ open, onClose, prompt, updatePrompt }) {
   const [textValue, setTextValue] = React.useState(prompt || "");
 
   // Sync when prompt prop changes
+  // React.useEffect(() => {
+  //   setTextValue(prompt || "");
+  // }, [prompt]);
+
   React.useEffect(() => {
-    setTextValue(prompt || "");
-  }, [prompt]);
+    if (mode === "custom") {
+      const savedPrompt = localStorage.getItem("customPrompt");
+      if (savedPrompt) {
+        setTextValue(savedPrompt);
+      }
+    } else {
+      setTextValue(prompt || "");
+    }
+  }, [mode, prompt]);
 
   const handleSave = () => {
     updatePrompt(textValue);
+     localStorage.setItem("customPrompt", textValue);
+
     onClose();
   };
 

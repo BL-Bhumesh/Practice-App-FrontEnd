@@ -47,8 +47,10 @@ function PracticePage() {
         if (!questionData) setError("No question found.");
         if (!promptData) setError("No prompt found.");
 
+
         setQuestion(questionData || null);
         setPrompt(promptData || "");
+        localStorage.setItem('promptData', JSON.stringify(promptData));
       })
       .catch((e) => setError(e.message || "Error fetching data"))
       .finally(() => setLoading(false));
