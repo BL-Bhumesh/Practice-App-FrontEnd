@@ -10,7 +10,9 @@ const generateRandomUserId = () => {
   return 'Rj' + Math.floor(10000000 + Math.random() * 90000000);
 };
 
-const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType }) => {
+const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType,questionType }) => {
+  console.log(answerType,"Answer Type")
+  console.log(questionType,"questionType ")
   const [code, setCode] = useState(
     'public class Main {\n    public static void main(String[] args) {\n           }\n}'
   );
@@ -127,8 +129,9 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType }) =
     const payload = {
       prompt: prompt,
       question_text: question?.stem_md,
+      question_type: questionType,
       answer_text: escapeCodeForJSON(code),
-      answerType:answerType,
+      answer_type:answerType,
       question_id: question?.id,
       coe_name: 'SRM',
       program_name: 'STEP',
@@ -137,7 +140,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType }) =
       module: 'OOPS',
     };
 
-    console.log(payload,"Payload")
+    console.log(payload,"Payload Submitting")
 
     submitAnswer(payload)
       .then((res) => {

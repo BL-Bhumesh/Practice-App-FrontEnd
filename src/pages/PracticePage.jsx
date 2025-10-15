@@ -10,6 +10,7 @@ import PromptDialog from "../components/PromptDialog";
 
 function PracticePage() {
   const [answerType, setAnswerType] = useState("");
+  const [questionType, setQuestionType] = useState("");
   const [programOutput, setProgramOutput] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [question, setQuestion] = useState(null);
@@ -35,7 +36,12 @@ function PracticePage() {
 
     Promise.all([getQuestions(answer, 0, 1), getPrompt(answer)])
       .then(([qRes, pRes]) => {
+        console.log(qRes.data.payload[0],'Payload Initial');
         const questionData = qRes.data?.payload?.[0];
+         let answerType = qRes.data.payload[0].answer_type || "";
+         let questionType = qRes.data.payload[0].question_type || "";
+        setAnswerType(answerType);
+        setQuestionType(questionType);
         let promptData = "";
 
         if (answer === "CODE") {
@@ -78,6 +84,8 @@ function PracticePage() {
           onReviewGenerated={handleReviewGenerated}
           question={question}
           prompt={prompt}
+          answerType={answerType}
+          questionType={questionType}
         />
       </Box>
       <SolutionPanel output={programOutput} review={reviewData} />
