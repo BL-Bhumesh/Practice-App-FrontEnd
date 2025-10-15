@@ -11,8 +11,6 @@ const generateRandomUserId = () => {
 };
 
 const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType,questionType }) => {
-  console.log(answerType,"Answer Type")
-  console.log(questionType,"questionType ")
   const [code, setCode] = useState(
     'public class Main {\n    public static void main(String[] args) {\n           }\n}'
   );
@@ -21,6 +19,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType,ques
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showOutputTerminal, setShowOutputTerminal] = useState(false);
   const [userId] = useState(generateRandomUserId);
+ 
 
   // --- WebSocket related states ---
   const wsRef = useRef(null);
@@ -140,7 +139,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType,ques
       module: 'OOPS',
     };
 
-    console.log(payload,"Payload Submitting")
+    
 
     submitAnswer(payload)
       .then((res) => {

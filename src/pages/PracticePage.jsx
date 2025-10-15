@@ -36,7 +36,7 @@ function PracticePage() {
 
     Promise.all([getQuestions(answer, 0, 1), getPrompt(answer)])
       .then(([qRes, pRes]) => {
-        console.log(qRes.data.payload[0],'Payload Initial');
+        
         const questionData = qRes.data?.payload?.[0];
          let answerType = qRes.data.payload[0].answer_type || "";
          let questionType = qRes.data.payload[0].question_type || "";

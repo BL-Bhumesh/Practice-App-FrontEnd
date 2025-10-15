@@ -3,9 +3,9 @@ import React from 'react'
 
 function SolutionPanel({output, review}) {
 
-  const codeAnalysis = review?.Code_Analysis;
-  const qualitative = review?.Code_Quality_Qualitative;
-  const quantitative = review?.Code_Quality_Quantitative;
+  const codeAnalysis = review?.Code_Analysis ? review.Code_Analysis : review?.Answer_Analysis;
+  const qualitative = review?.Code_Quality_Qualitative ? review.Code_Quality_Qualitative : review?.Answer_Quality_Qualitative;
+  const quantitative = review?.Code_Quality_Quantitative ? review.Code_Quality_Quantitative : review?.Answer_Quality_Quantitative;
 
   return (
     <Box
@@ -37,13 +37,13 @@ function SolutionPanel({output, review}) {
             mb: 1,
           }}
         >
-          <Typography variant="subtitle2">Test Cases</Typography>
+          {/* <Typography variant="subtitle2">Test Cases</Typography> */}
           {/* <Button variant="contained" size="small" color="error">
             Failed
           </Button> */}
         </Box>
 
-        <Typography variant="body2">Test Cases Faised</Typography>
+        {/* <Typography variant="body2">Test Cases Faised</Typography> */}
       </Box>
 
       <Box
@@ -65,10 +65,10 @@ function SolutionPanel({output, review}) {
        {codeAnalysis && (
           <>
             <Typography variant="body2" sx={{ mb: 1 }}>
-              <b>What worked well:</b> {codeAnalysis.What_worked_well}
+              <b>What worked well:</b> {codeAnalysis.What_worked_well ?codeAnalysis.What_worked_well: codeAnalysis.What_was_explained_well}
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              <b>What can be improved:</b> {codeAnalysis.What_can_be_improved}
+              <b>What can be improved:</b> {codeAnalysis.What_can_be_improved }
             </Typography>
           </>
         )}
