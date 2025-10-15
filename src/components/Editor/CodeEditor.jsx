@@ -14,6 +14,7 @@ const CodeEditor = ({ onRun, onReviewGenerated, question, prompt,answerType }) =
   const [code, setCode] = useState(
     'public class Main {\n    public static void main(String[] args) {\n           }\n}'
   );
+
   const [editorTheme, setEditorTheme] = useState('vs-dark');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showOutputTerminal, setShowOutputTerminal] = useState(false);
